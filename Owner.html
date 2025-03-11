@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายการจองจักรยาน</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: lightgray; }
+    </style>
+</head>
+<body>
+    <h1>📋 รายการจองจักรยาน</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>หมายเลข/สีจักรยาน</th>
+                <th>ชื่อ</th>
+                <th>เบอร์โทร</th>
+                <th>วิธีชำระเงิน</th>
+                <th>จำนวนเงิน</th>
+                <th>เวลาจอง</th>
+            </tr>
+        </thead>
+        <tbody id="booking-list"></tbody>
+    </table>
+    <button onclick="exportToExcel()">📤 ส่งออกเป็น Excel</button>
+    
+    <script>
+                function loadBookings() {
+            const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+            const tableBody = document.getElementById("booking-list");
+            tableBody.innerHTML = "";
+            bookings.forEach((booking) => {
+                const row = `<tr>
+                    <td>${booking.bikeDetails}</td>
+                    <td>${booking.name}</td>
+                    <td>${booking.phone}</td>
+                    <td>${booking.method === "cash" ? "เงินสด" : "โอนเงิน"}</td>
+                    <td>${booking.method === "cash" ? (booking.cashAmount || "-") : "-"}</td>
+                    <td>${booking.timestamp}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function exportToExcel() {
+            let table = document.querySelector("table");
+            let tableHtml = table.outerHTML;
+            let blob = new Blob([tableHtml], { type: "application/vnd.ms-excel" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "bike_rental_bookings.xls";
+            a.click();
+        }
+
+        window.onload = loadBookings;
+
+    </script>
+</body>
+</html>
