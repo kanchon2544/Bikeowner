@@ -25,4 +25,8 @@ function exportToExcel() {
     a.click();
 }
 
+// ตรวจสอบว่า JS โหลดจาก URL หรือไม่
+console.log("Loading rental_dashboard.js from: " + window.location.href);
+
 window.onload = loadBookings;
+
